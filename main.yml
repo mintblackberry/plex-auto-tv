@@ -1,0 +1,103 @@
+secrets: secrets.yml
+
+templates:
+
+  #------------------ Two set of series, one SD and one 720p
+
+  series-input:
+    configure_series:
+      from:
+        inputs:
+          - trakt_list:
+              username: '{{ secrets.trakt.user }}'
+              password: '{{ secrets.trakt.pass }}'
+              list: tvshows
+              type: shows
+      settings:
+        quality: webrip+ <720p
+
+  series-input-720:
+    configure_series:
+      from:
+        inputs:
+          - trakt_list:
+              username: '{{ secrets.trakt.user }}'
+              password: '{{ secrets.trakt.pass }}'
+              list: tvshows_720
+              type: shows
+      settings:
+        quality: HDTV+ 720p
+
+  #------------------ Public Torrents
+
+  transmission-settings:
+    verify_ssl_certificates: yes
+    inputs:
+      - rss: http://limetorrentlinked.com/rss/20/
+      - rss: http://showrss.info/feeds/all.rss
+      - rss: http://extratorrent.cc/rss.xml?cid=8
+      - rss: http://feeds.feedburner.com/eztv-rss-atom-feeds?format=xml
+      - rss: https://torrentz.eu/feed?verified&q=hdtv+x264
+      - rss: https://kickass.to/usearch/user:ettv/?field=time_add&sorder=desc&rss=1
+    content_filter:
+      require: 
+        - "*.mp4"
+        - "*.avi"
+        - "*.mkv"
+      require_mainfile: yes
+    transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 8897
+      username: '{{ secrets.transmission.user }}'
+      password: '{{ secrets.transmission.pass }}'
+      main_file_only: yes
+      ratio: 0
+      path: '{{ secrets.transmission.quickpath }}'
+      content_filename: '{{ series_name }}---Season {{ series_season }}---{{ series_id }}'
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*.txt'
+
+  #------------------- Private Torrents that require Seeding and Extraction
+
+  transmission-seed:
+    verify_ssl_certificates: yes
+    inputs:
+      - rss: '{{ secrets.feeds.seed1 }}'
+    content_filter:
+      require: "*.rar"
+      require_mainfile: no
+
+    transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 8897
+      username: '{{ secrets.transmission.user }}'
+      password: '{{ secrets.transmission.pass }}'
+      ratio: 2
+      path: '{{ secrets.transmission.seedpath }}'
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*.txt'
+
+tasks:
+  torrent-tv-seed:
+    template:
+      - series-input
+      - transmission-seed
+
+  torrent-tv-seed-720:
+    template:
+      - series-input-720
+      - transmission-seed
+
+  torrent-tv:
+    template: 
+      - series-input
+      - transmission-settings
+
+  torrent-tv-720:
+    template: 
+      - series-input-720
+      - transmission-settings
