@@ -1,0 +1,7 @@
+inputs:
+  - rss: http://limetorrentlinked.com/rss/20/
+  - rss: http://showrss.info/feeds/all.rss
+  - rss: http://extratorrent.cc/rss.xml?cid=8
+  - rss: http://feeds.feedburner.com/eztv-rss-atom-feeds?format=xml
+  - rss: https://torrentz.eu/feed?verified&q=hdtv+x264
+  - rss: https://kickass.to/usearch/user:ettv/?field=time_add&sorder=desc&rss=1
