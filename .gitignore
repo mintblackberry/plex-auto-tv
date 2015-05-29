@@ -1,4 +1,2 @@
-logs/
-received/
-db-main.sqlite
-secrets.yml
+*
+!main.yml
