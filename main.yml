@@ -4,6 +4,16 @@ templates:
 
   common-settings:
     verify_ssl_certificates: yes
+    headers:
+      User-Agent: "Mozilla/5.0 (Windows NT 5.1; rv:16.0) Gecko/20100101 Firefox/16.0"
+    trakt_lookup: yes
+    make_rss:
+      file: '{{ secrets.out.rssfile }}'
+      days: 1
+      items: 10
+    free_space:
+      path: '{{ secrets.space.path }}'
+      space: 1000
 
   #------------------ Two set of series, one SD and one 720p
 
@@ -37,7 +47,7 @@ templates:
 
   #------------------ Public Torrents
 
-  transmission-settings:
+  torrent-settings:
     verify_ssl_certificates: yes
     include: pubfeeds.yml
     content_filter:
@@ -54,7 +64,7 @@ templates:
 
   #------------------- Private Torrents that require Seeding and Extraction
 
-  transmission-settings-seed:
+  torrent-settings-seed:
     verify_ssl_certificates: yes
     inputs:
       - rss: { url: '{{ secrets.feeds.seed1 }}', silent: yes }
@@ -86,24 +96,31 @@ templates:
         - '*.sfv'
         - '*.txt'
         - '*.exe'
+    torrent_alive:
+      min_seeds: 10
+      reject_for: 5 minutes
 
 tasks:
   torrent-tv-seed:
+    priority: 90
     template:
       - series-input
-      - transmission-settings-seed
+      - torrent-settings-seed
 
   torrent-tv-seed-720:
+    priority: 10
     template:
       - series-input-720
-      - transmission-settings-seed
+      - torrent-settings-seed
 
   torrent-tv:
+    priority: 80
     template: 
       - series-input
-      - transmission-settings
+      - torrent-settings
 
   torrent-tv-720:
+    priority: 20
     template: 
       - series-input-720
-      - transmission-settings
+      - torrent-settings
