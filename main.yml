@@ -96,6 +96,7 @@ templates:
         - '*.sfv'
         - '*.txt'
         - '*.exe'
+        - '*sample*'
     torrent_alive:
       min_seeds: 10
       reject_for: 5 minutes
