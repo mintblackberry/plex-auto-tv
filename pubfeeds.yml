@@ -1,7 +1,7 @@
 inputs:
-  - rss: http://limetorrentlinked.com/rss/20/
-  - rss: http://showrss.info/feeds/all.rss
-  - rss: http://extratorrent.cc/rss.xml?cid=8
-  - rss: http://feeds.feedburner.com/eztv-rss-atom-feeds?format=xml
-  - rss: https://torrentz.eu/feed?verified&q=hdtv+x264
-  - rss: https://kickass.to/usearch/user:ettv/?field=time_add&sorder=desc&rss=1
+  - rss: { url: 'http://limetorrentlinked.com/rss/20/', silent: yes }
+  - rss: { url: 'http://showrss.info/feeds/all.rss', silent: yes }
+  - rss: { url: 'http://extratorrent.cc/rss.xml?cid=8', silent: yes }
+  - rss: { url: 'http://feeds.feedburner.com/eztv-rss-atom-feeds?format=xml', silent: yes }
+  - rss: { url: 'https://torrentz.eu/feed?verified&q=hdtv+x264', silent: yes }
+  - rss: { url: 'https://kickass.to/usearch/user:ettv/?field=time_add&sorder=desc&rss=1', silent: yes }

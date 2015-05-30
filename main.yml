@@ -2,6 +2,9 @@ secrets: secrets.yml
 
 templates:
 
+  common-settings:
+    verify_ssl_certificates: yes
+
   #------------------ Two set of series, one SD and one 720p
 
   series-input:
@@ -15,6 +18,8 @@ templates:
               type: shows
       settings:
         quality: webrip+ <720p
+    template:
+      - common-settings
 
   series-input-720:
     configure_series:
@@ -27,6 +32,8 @@ templates:
               type: shows
       settings:
         quality: HDTV+ 720p
+    template:
+      - common-settings
 
   #------------------ Public Torrents
 
@@ -39,52 +46,57 @@ templates:
         - "*.avi"
         - "*.mkv"
       require_mainfile: yes
+    set:
+      path: '{{ secrets.transmission.quickpath }}'
+      ratio: 0
+    template:
+      - transmission-rpc
+
+  #------------------- Private Torrents that require Seeding and Extraction
+
+  transmission-settings-seed:
+    verify_ssl_certificates: yes
+    inputs:
+      - rss: { url: '{{ secrets.feeds.seed1 }}', silent: yes }
+    content_filter:
+      require: 
+        - '*.rar'
+        - '*.mkv'
+        - '*.mp4'
+        - '*.avi'
+      reject:   
+        - '*.wmv'
+    set:
+      path: '{{ secrets.transmission.seedpath }}'
+      ratio: 2
+    template: 
+      - transmission-rpc
+  
+  #-------------------- Transmission RPC Template
+
+  transmission-rpc:
     transmission:
       host: '{{ secrets.transmission.host }}'
       port: 8897
       username: '{{ secrets.transmission.user }}'
       password: '{{ secrets.transmission.pass }}'
-      main_file_only: yes
-      ratio: 0
-      path: '{{ secrets.transmission.quickpath }}'
       content_filename: '{{ series_name }}---Season {{ series_season }}---{{ series_id }}'
       skip_files:
         - '*.nfo'
         - '*.sfv'
         - '*.txt'
-
-  #------------------- Private Torrents that require Seeding and Extraction
-
-  transmission-seed:
-    verify_ssl_certificates: yes
-    inputs:
-      - rss: '{{ secrets.feeds.seed1 }}'
-    content_filter:
-      require: "*.rar"
-      require_mainfile: no
-
-    transmission:
-      host: '{{ secrets.transmission.host }}'
-      port: 8897
-      username: '{{ secrets.transmission.user }}'
-      password: '{{ secrets.transmission.pass }}'
-      ratio: 2
-      path: '{{ secrets.transmission.seedpath }}'
-      skip_files:
-        - '*.nfo'
-        - '*.sfv'
-        - '*.txt'
+        - '*.exe'
 
 tasks:
   torrent-tv-seed:
     template:
       - series-input
-      - transmission-seed
+      - transmission-settings-seed
 
   torrent-tv-seed-720:
     template:
       - series-input-720
-      - transmission-seed
+      - transmission-settings-seed
 
   torrent-tv:
     template: 
