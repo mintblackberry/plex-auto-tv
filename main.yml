@@ -48,7 +48,6 @@ templates:
   #------------------ Public Torrents
 
   torrent-settings:
-    verify_ssl_certificates: yes
     include: pubfeeds.yml
     content_filter:
       require: 
@@ -65,7 +64,6 @@ templates:
   #------------------- Private Torrents that require Seeding and Extraction
 
   torrent-settings-seed:
-    verify_ssl_certificates: yes
     inputs:
       - rss: { url: '{{ secrets.feeds.seed1 }}', silent: yes }
     content_filter:
