@@ -79,7 +79,24 @@ templates:
       ratio: 2
     template: 
       - transmission-rpc
-  
+
+  #------------------- Private Torrents with single MKV files
+
+  torrent-settings-seed-single:
+    inputs:
+      - rss: { url: '{{ secrets.feeds.seed1 }}', silent: yes }
+    content_filter:
+      require: 
+        - '*.mkv'
+      reject:   
+        - '*.wmv'
+      require_mainfile: yes
+    set:
+      path: '{{ secrets.transmission.seedpath }}'
+      ratio: 2
+    template: 
+      - transmission-rpc
+ 
   #-------------------- Transmission RPC Template
 
   transmission-rpc:
@@ -96,8 +113,8 @@ templates:
         - '*.exe'
         - '*sample*'
     torrent_alive:
-      min_seeds: 10
-      reject_for: 5 minutes
+      min_seeds: 50
+      reject_for: 12 hours
 
 tasks:
   torrent-tv-seed:
@@ -110,7 +127,7 @@ tasks:
     priority: 10
     template:
       - series-input-720
-      - torrent-settings-seed
+      - torrent-settings-seed-single
 
   torrent-tv:
     priority: 80

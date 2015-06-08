@@ -3,5 +3,5 @@ inputs:
   - rss: { url: 'http://showrss.info/feeds/all.rss', silent: yes }
   - rss: { url: 'http://extratorrent.cc/rss.xml?cid=8', silent: yes }
   - rss: { url: 'http://feeds.feedburner.com/eztv-rss-atom-feeds?format=xml', silent: yes }
-  - rss: { url: 'https://torrentz.eu/feed?verified&q=hdtv+x264', silent: yes }
   - rss: { url: 'https://kickass.to/usearch/user:ettv/?field=time_add&sorder=desc&rss=1', silent: yes }
+  - rss: { url: 'https://kickass.to/usearch/user:Tiny_e/?field=time_add&sorder-desc&rss=1', silent: yes }
