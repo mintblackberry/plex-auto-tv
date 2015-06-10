@@ -41,7 +41,10 @@ templates:
               list: tvshows_720
               type: shows
       settings:
-        quality: HDTV+ 720p
+        upgrade: yes
+        qualities: 
+          - webrip+ <720p
+          - hdtv+ 720p
     template:
       - common-settings
 
@@ -113,7 +116,7 @@ templates:
         - '*.exe'
         - '*sample*'
     torrent_alive:
-      min_seeds: 50
+      min_seeds: 40
       reject_for: 12 hours
 
 tasks:
